@@ -51,3 +51,17 @@ Salida: `<kernel> n=<n> time_s=<segundos> checksum=<valor>`
 
 Los resultados se acumulan en `results/timing.csv` y `results/perf.csv`.
 Ejecutar con distintos `BINDIR` permite comparar flags en el mismo CSV.
+
+## Correr todo
+
+```bash
+./scripts/run_timing.sh bin/O0
+./scripts/run_timing.sh bin/O2
+./scripts/run_timing.sh bin/O3native
+./scripts/run_timing.sh bin/O3fast
+
+./scripts/run_perf_all.sh bin/O0
+./scripts/run_perf_all.sh bin/O2
+./scripts/run_perf_all.sh bin/O3native
+./scripts/run_perf_all.sh bin/O3fast
+```

@@ -29,8 +29,8 @@ for KERNEL in "$BINDIR"/*; do
     for N in "${SIZES[@]}"; do
         echo -n "  $NAME  n=$N ... "
         OUTPUT="$("$KERNEL" "$N")"
-        TIME_S="$(echo "$OUTPUT" | grep -oP 'time_s=\K[0-9.]+')"
-        CHECKSUM="$(echo "$OUTPUT" | grep -oP 'checksum=\K[0-9.]+')"
+        TIME_S="$(echo "$OUTPUT" | grep -oP 'time_s=\K[0-9.eE+-]+')"
+        CHECKSUM="$(echo "$OUTPUT" | grep -oP 'checksum=\K[0-9.eE+-]+')"
         echo "$NAME,$N,$BINDIR,$TIME_S,$CHECKSUM" >> "$CSV"
         echo "$TIME_S s"
     done

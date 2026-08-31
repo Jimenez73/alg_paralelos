@@ -6,7 +6,7 @@ ARCHIVO_SALIDA="$RESULTS_DIR/resultados_item_f.csv"
 mkdir -p "$RESULTS_DIR"
 
 # Crear el encabezado del archivo CSV
-echo "version,p,t,tiempo" > $ARCHIVO_SALIDA
+echo "version,p,tiempo" > $ARCHIVO_SALIDA
 
 # Definir el límite lógico de núcleos
 P_MAX=12
@@ -34,10 +34,4 @@ for archivo in "$CARPETA"/*.py; do
     fi
 done
 
-
-
 echo "Experimentos finalizados. Resultados guardados en $ARCHIVO_SALIDA"
-
-
-
-

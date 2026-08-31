@@ -1,10 +1,21 @@
-import argparse
-import time
 import numpy as np
 from joblib import Parallel, delayed
 from threadpoolctl import threadpool_limits
 
+import argparse
+import time
+import psutil
+import threading
+
 from config import N, K, B
+
+porcentajes_cpu = []
+monitoreando = False
+
+def registrar_cpu():
+    # Revisa la CPU cada 0.1 segundos
+    while monitoreando:
+        porcentajes_cpu.append(psutil.cpu_percent(interval=0.1))
 
 rng = np.random.default_rng(42)
 
@@ -29,17 +40,22 @@ def ajustar_un_resample_numpy(X, y, random_seed):
     return beta_b
 
 if __name__ == "__main__":
-    # 1. Configurar la recepción de argumentos p y t
     parser = argparse.ArgumentParser()
     parser.add_argument("-p", type=int, required=True, help="Número de procesos")
     parser.add_argument("-t", type=int, default=12, help="Número de threads por proceso")
+    parser.add_argument("-cpu", type=bool, default=False, help="Imprimir uso de CPU")
     args = parser.parse_args()
+
+    if args.cpu:
+        monitoreando = True
+
+    hilo_monitor = threading.Thread(target=registrar_cpu)
+    hilo_monitor.start()
 
     semillas_base = np.random.SeedSequence(42).generate_state(B)
 
-    # 2. Limitar los threads de NumPy y medir solo la sección paralela
-    with threadpool_limits(limits=args.t):
-        inicio = time.perf_counter()
+    with threadpool_limits(limits=args.t):  # Limitar los threads de NumPy
+        inicio = time.perf_counter()        # Medir solo la sección paralela
         
         betas_bootstrap = Parallel(n_jobs=args.p)(
             delayed(ajustar_un_resample_numpy)(X, y, semillas_base[i]) for i in range(B)
@@ -49,5 +65,13 @@ if __name__ == "__main__":
 
     tiempo_total = fin - inicio
 
-    # 3. Imprimir el resultado en formato CSV para que el orquestador lo guarde
-    print(f"bs_numpy,{args.p},{args.t},{tiempo_total}")
+    monitoreando = False
+    hilo_monitor.join()
+
+    # Imprimir el resultado en formato CSV para que el orquestador lo guarde
+    resultados = f"bs_numpy,{args.p},{args.t},{tiempo_total}"
+
+    if args.cpu:
+        resultados += f',"{porcentajes_cpu}"' # Porcentaje de CPU usado en intervalos de 0.1s
+
+    print(resultados)

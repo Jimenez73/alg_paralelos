@@ -6,7 +6,7 @@ ARCHIVO_SALIDA="$RESULTS_DIR/resultados_numpy.csv"
 mkdir -p "$RESULTS_DIR"
 
 # Crear el encabezado del archivo CSV
-echo "p,t,tiempo" > $ARCHIVO_SALIDA
+echo "version,p,t,tiempo" > $ARCHIVO_SALIDA
 
 # Definir el límite lógico de núcleos
 P_MAX=12

@@ -29,15 +29,25 @@ y = X @ beta_real + rng.standard_normal(N)
 def ajustar_un_resample_numpy(X, y, random_seed):
     rng = np.random.default_rng(random_seed)
 
+    # 1. Sortear índices y calcular frecuencias (pesos)
     indices = rng.choice(N, size=N, replace=True)
-    X_b = X[indices]
-    y_b = y[indices]
-
-    A = X_b.T @ X_b
-    B = X_b.T @ y_b
+    pesos = np.bincount(indices, minlength=N)
+    
+    # 2. Convertir pesos a formato de columna (N, 1) para broadcasting
+    pesos_col = pesos[:, np.newaxis]
+    
+    # 3. Aplicar pesos a X e y (equivale a la matriz W)
+    # X_w tiene la misma dimensión que X, pero cada fila está multiplicada por su peso
+    X_w = X * pesos_col 
+    y_w = y * pesos
+    
+    # 4. Resolver el sistema de ecuaciones normales ponderado
+    A = X.T @ X_w
+    B = X.T @ y_w
     beta_b = np.linalg.solve(A, B)
     
     return beta_b
+
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()

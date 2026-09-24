@@ -1,7 +1,7 @@
 #!/bin/bash
 
 RESULTS_DIR="results"
-ARCHIVO_SALIDA="$RESULTS_DIR/resultados_numpy.csv"
+ARCHIVO_SALIDA="$RESULTS_DIR/resultados_i.csv"
 
 mkdir -p "$RESULTS_DIR"
 

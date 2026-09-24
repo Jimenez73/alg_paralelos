@@ -1,7 +1,7 @@
 import argparse
 import time
 import numpy as np
-from sklearn.linear_model import LinearRegression
+from sklearn.linear_model import Ridge
 from joblib import Parallel, delayed
 
 from config import N, K, B
@@ -19,8 +19,8 @@ def ajustar_un_resample(X, y, random_seed):
 
     indices = rng.choice(N, size=N, replace=True)
     pesos = np.bincount(indices, minlength=N)
-    
-    modelo = LinearRegression(fit_intercept=False)
+
+    modelo = Ridge(alpha=0.0, solver='cholesky', fit_intercept=False)
     modelo.fit(X, y, sample_weight=pesos)
 
     return modelo.coef_

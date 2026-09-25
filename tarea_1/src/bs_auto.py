@@ -39,5 +39,13 @@ if __name__ == "__main__":
 
     tiempo_total = fin - inicio
 
+    # Intervalo de confianza
+    betas_bootstrap = np.array([model.coef_ for model in bagging_model.estimators_])
+    
+    limite_inferior = np.percentile(betas_bootstrap, 2.5, axis=0)
+    limite_superior = np.percentile(betas_bootstrap, 97.5, axis=0)
+
+    porcentaje = np.mean((beta_real >= limite_inferior) & (beta_real <= limite_superior)) * 100
+
     # 3. Imprimir el resultado en formato CSV para que el orquestador lo guarde
-    print(f"bs_auto,{args.p},,{tiempo_total}")
+    print(f"bs_auto,{args.p},,{tiempo_total},{porcentaje:.2f}")

@@ -44,5 +44,13 @@ if __name__ == "__main__":
 
     tiempo_total = fin - inicio
 
+    # Intervalo de confianza
+    betas_array = np.array(betas_bootstrap)
+
+    limite_inferior = np.percentile(betas_array, 2.5, axis=0)
+    limite_superior = np.percentile(betas_array, 97.5, axis=0)
+    
+    porcentaje = np.mean((beta_real >= limite_inferior) & (beta_real <= limite_superior)) * 100
+
     # 3. Imprimir el resultado en formato CSV para que el orquestador lo guarde
-    print(f"bs_sklearn,{args.p},,{tiempo_total}")
+    print(f"bs_sklearn,{args.p},,{tiempo_total},{porcentaje:.2f}")

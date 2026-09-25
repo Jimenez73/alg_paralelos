@@ -6,7 +6,7 @@ ARCHIVO_SALIDA="$RESULTS_DIR/resultados_e.csv"
 mkdir -p "$RESULTS_DIR"
 
 # Crear el encabezado del archivo CSV
-echo "version,p,t,tiempo,uso_cpu" > $ARCHIVO_SALIDA
+echo "version,p,t,tiempo,porcentaje,uso_cpu" > $ARCHIVO_SALIDA
 
 # Definir el límite lógico de núcleos
 P_MAX=12

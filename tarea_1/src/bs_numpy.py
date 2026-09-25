@@ -78,8 +78,16 @@ if __name__ == "__main__":
     monitoreando = False
     hilo_monitor.join()
 
+    # Intervalo de confianza
+    betas_array = np.array(betas_bootstrap)
+
+    limite_inferior = np.percentile(betas_array, 2.5, axis=0)
+    limite_superior = np.percentile(betas_array, 97.5, axis=0)
+
+    porcentaje = np.mean((beta_real >= limite_inferior) & (beta_real <= limite_superior)) * 100
+
     # Imprimir el resultado en formato CSV para que el orquestador lo guarde
-    resultados = f"bs_numpy,{args.p},{args.t},{tiempo_total}"
+    resultados = f"bs_numpy,{args.p},{args.t},{tiempo_total},{porcentaje:.2f}"
 
     if args.cpu:
         resultados += f',"{porcentajes_cpu}"' # Porcentaje de CPU usado en intervalos de 0.1s

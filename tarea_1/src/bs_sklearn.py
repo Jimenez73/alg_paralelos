@@ -33,7 +33,7 @@ if __name__ == "__main__":
 
     semillas_base = np.random.SeedSequence(42).generate_state(B)
 
-    # 2. Limitar los threads de NumPy y medir solo la sección paralela
+    # 2. Medir solo la sección paralela
     inicio = time.perf_counter()
     
     betas_bootstrap = Parallel(n_jobs=args.p)(
@@ -49,7 +49,7 @@ if __name__ == "__main__":
 
     limite_inferior = np.percentile(betas_array, 2.5, axis=0)
     limite_superior = np.percentile(betas_array, 97.5, axis=0)
-    
+
     porcentaje = np.mean((beta_real >= limite_inferior) & (beta_real <= limite_superior)) * 100
 
     # 3. Imprimir el resultado en formato CSV para que el orquestador lo guarde

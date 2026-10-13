@@ -31,7 +31,7 @@ for N in "${valores_N[@]}"; do
             export OMP_NUM_THREADS=$p 
             echo "Ejecutando $alg_bin $N $n $p..."
 
-            output=$($alg_bin $N)
+            output=$($alg_bin $N $n)
             tiempo=$(echo "$output" | grep -oP 'tiempo=\K[0-9.]+')
             checksum=$(echo "$output" | grep -oP 'checksum=\K[0-9.]+')
             

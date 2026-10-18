@@ -28,7 +28,7 @@ void init_matrix(std::vector<double>& M, int N, double offset) {
 void multiply_leaf(const MatView& A, const MatView& B, const MatView& C) {
     int s = C.size;
 
-    #pragma omp parallel for schedule(static)
+    #pragma omp parallel for schedule(dynamic, 128)
     for (int i = 0; i < s; ++i) {
         for (int k = 0; k < s; ++k) {
             double a = A.at(i, k);

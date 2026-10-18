@@ -29,7 +29,7 @@ for N in "${valores_N[@]}"; do
         for p in "${valores_p[@]}"; do
             # Usar p hilos en la ejecución
             export OMP_NUM_THREADS=$p 
-            echo "Ejecutando $alg_bin $N $n $p..."
+            echo "Ejecutando $alg_bin ($N $n $p)..."
 
             output=$($alg_bin $N $n)
             tiempo=$(echo "$output" | grep -oP 'tiempo=\K[0-9.]+')

@@ -1,0 +1,28 @@
+Parte 1
+
+serial, n=2000, pasos=100, dE/E=1.80e-05, tiempo=1.3784
+MPI, n=2000, pasos=100, dE/E=1.80e-05, tiempo=1.3861, p=1
+MPI, n=2000, pasos=100, dE/E=1.80e-05, tiempo=0.7009, p=2
+MPI, n=2000, pasos=100, dE/E=1.80e-05, tiempo=0.3596, p=4
+
+- Los errores de energía coinciden y a medida que se suman procesos el tiempo disminuye.
+
+Con la implementación realizada:
+- Cada proceso envía y recive p-1 mensajes por cada paso de tiempo para actualizar la información de las posiciones.
+- Un mensaje contiene las posiciones (x,y) de N/p particulas, por lo que el mensaje pesa 2 x N/p x 8 bytes.
+
+Parte 2
+
+MPI_colectivas, n=2000, pasos=100, dE/E=1.80e-05, tiempo=1.4144, p=1
+MPI_colectivas, n=2000, pasos=100, dE/E=1.80e-05, tiempo=0.7033, p=2
+MPI_colectivas, n=2000, pasos=100, dE/E=1.80e-05, tiempo=0.3661, p=4
+
+- Los errores coinciden.
+
+Reemplazo de operaciones:
+- El itercambio de información sobre las posiciones usando Isend y Irecv se reemplaza por Allgather.
+- La recolección de velocidades hacia el proceso principal (rank 0) usando Send y Recv se reemplaza por Gather.
+
+Costo de la comunicación por paso temporal:
+- log_2(p) * alpha + (p-1) * n/p * beta
+

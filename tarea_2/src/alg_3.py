@@ -1,7 +1,6 @@
 import numpy as np
 from numba import njit, prange, set_num_threads
 import time
-import os
 import argparse
 
 @njit
